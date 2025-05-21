@@ -1,0 +1,52 @@
+<Window x:Class="WikiReflectionTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WikiReflectionTool"
+        mc:Ignorable="d"
+        Title="Wikipedia Reflection Tool" Height="800" Width="1000"
+        Style="{DynamicResource WindowStyle}"
+        Loaded="MainWindow_Loaded">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Controls -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+            <Label x:Name="GuiLanguageLabel" Content="Interface Language:" VerticalAlignment="Center" FontWeight="Bold" Style="{DynamicResource LabelStyle}"/>
+            <ComboBox x:Name="GuiLanguageComboBox" Width="150" Margin="5,0,15,0" Style="{DynamicResource ComboBoxStyle}"/>
+            <Label x:Name="WikiLanguageLabel" Content="Wikipedia Language:" VerticalAlignment="Center" FontWeight="Bold" Style="{DynamicResource LabelStyle}"/>
+            <ComboBox x:Name="WikiLanguageComboBox" Width="150" Margin="5,0,15,0" Style="{DynamicResource ComboBoxStyle}"/>
+            <Button x:Name="FetchButton" Content="🔄 New Random Article" Width="200" Margin="15,0,0,0" Style="{DynamicResource ButtonStyle}"/>
+            <StackPanel Width="20"/> <!-- Spacer -->
+            <Button x:Name="ThemeButton" Content="🌙 Dark Theme" Width="120" Margin="0,0,0,0" Style="{DynamicResource ButtonStyle}"/>
+        </StackPanel>
+
+        <!-- Article Content -->
+        <Border Grid.Row="1" Style="{DynamicResource ArticleBorderStyle}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel Margin="15">
+                    <TextBlock x:Name="TitleTextBlock" Text="Fetching article..." FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" Style="{DynamicResource TitleTextBlockStyle}" MouseDown="TitleTextBlock_MouseDown">
+                         <TextBlock.ToolTip>
+                            <ToolTip Content="Click to open in browser"/>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+
+                    <Label x:Name="SummaryLabel" Content="Summary" FontSize="16" FontWeight="Bold" Margin="0,10,0,5" Style="{DynamicResource HeadingLabelStyle}"/>
+                    <TextBox x:Name="SummaryTextBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" Style="{DynamicResource TextBoxStyle}"/>
+
+                    <Label x:Name="SectionsLabel" Content="Sections" FontSize="16" FontWeight="Bold" Margin="0,15,0,5" Visibility="Collapsed" Style="{DynamicResource HeadingLabelStyle}"/>
+                    <!-- For sections, a FlowDocumentScrollViewer might be better for rich text, but TextBox is simpler for now -->
+                    <TextBox x:Name="SectionsTextBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" Visibility="Collapsed" Style="{DynamicResource TextBoxStyle}" AcceptsReturn="True"/>
+
+
+                    <Label x:Name="CategoriesLabel" Content="Categories" FontSize="16" FontWeight="Bold" Margin="0,15,0,5" Visibility="Collapsed" Style="{DynamicResource HeadingLabelStyle}"/>
+                    <TextBox x:Name="CategoriesTextBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="50" Visibility="Collapsed" Style="{DynamicResource TextBoxStyle}"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Window> 
