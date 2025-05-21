@@ -1,0 +1,3 @@
+PyQt6
+wikipedia-api
+requests 
