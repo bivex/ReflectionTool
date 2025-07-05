@@ -1,5 +1,5 @@
 # Wikipedia Reflection Tool
-[![Mirrored with 🔍](https://a.b-b.top/badge.svg?repo=ReflectionTool&label=Mirrored%20with%20🔍&background_color=455a64&background_color2=607d8b&utm_source=github&utm_medium=readme&utm_campaign=badge)](https://a.b-b.top)
+[![Mirrored with 🔍](https://a.b-b.top/badge.svg?repo=ReflectionTool&label=Mirrored&background_color=455a64&background_color2=607d8b&utm_source=github&utm_medium=readme&utm_campaign=badge)](https://a.b-b.top)
 
 This is a simple GUI application built with PyQt6 that allows users to fetch and view random Wikipedia articles in various languages and themes.
 
