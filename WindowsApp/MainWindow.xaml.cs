@@ -255,7 +255,7 @@ namespace WikiReflectionTool
                     // Display the extract (summary)
                     if (page.TryGetProperty("extract", out JsonElement extract))
                     {
-                        SummaryTextBox.Text = extract.GetString();
+                        SummaryTextBox.Text = FormatTextForReading(extract.GetString());
                     }
                     else
                     {
@@ -269,13 +269,24 @@ namespace WikiReflectionTool
                         SectionsTextBox.Visibility = Visibility.Visible;
 
                         string sectionsText = "";
+                        int sectionCounter = 1;
                         foreach (JsonElement section in sections.EnumerateArray())
                         {
                             if (section.TryGetProperty("line", out JsonElement line) &&
                                 section.TryGetProperty("level", out JsonElement level))
                             {
-                                string indent = new string(' ', (level.GetInt32() - 1) * 4);
-                                sectionsText += $"{indent}{line.GetString()}\n";
+                                int levelNum = level.GetInt32();
+                                if (levelNum == 2) // Main sections
+                                {
+                                    sectionsText += $"\n{sectionCounter}. {line.GetString()}\n";
+                                    sectionsText += new string('-', Math.Min(line.GetString().Length + 3, 50)) + "\n";
+                                    sectionCounter++;
+                                }
+                                else if (levelNum > 2) // Sub-sections
+                                {
+                                    string indent = new string(' ', (levelNum - 2) * 2);
+                                    sectionsText += $"{indent}• {line.GetString()}\n";
+                                }
                             }
                         }
                         SectionsTextBox.Text = sectionsText;
@@ -293,11 +304,25 @@ namespace WikiReflectionTool
                         CategoriesTextBox.Visibility = Visibility.Visible;
 
                         string categoriesText = "";
+                        var categoryList = new List<string>();
                         foreach (JsonElement category in categories.EnumerateArray())
                         {
                             if (category.TryGetProperty("title", out JsonElement categoryTitle))
                             {
-                                categoriesText += $"{categoryTitle.GetString()}\n";
+                                string catName = categoryTitle.GetString().Replace("Category:", "").Trim();
+                                if (!string.IsNullOrEmpty(catName))
+                                {
+                                    categoryList.Add(catName);
+                                }
+                            }
+                        }
+                        
+                        if (categoryList.Count > 0)
+                        {
+                            categoriesText = "📂 Категории:\n\n";
+                            for (int i = 0; i < categoryList.Count; i++)
+                            {
+                                categoriesText += $"  {i + 1}. {categoryList[i]}\n";
                             }
                         }
                         CategoriesTextBox.Text = categoriesText;
@@ -313,6 +338,40 @@ namespace WikiReflectionTool
             {
                 DisplayError($"Error parsing article data: {ex.Message}");
             }
+        }
+
+        private string FormatTextForReading(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+
+            // Split into sentences and add proper spacing
+            var sentences = text.Split(new char[] { '.', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+            var formattedText = new System.Text.StringBuilder();
+
+            for (int i = 0; i < sentences.Length; i++)
+            {
+                string sentence = sentences[i].Trim();
+                if (!string.IsNullOrEmpty(sentence))
+                {
+                    // Add sentence with proper punctuation
+                    char lastChar = text.Substring(text.IndexOf(sentence) + sentence.Length).FirstOrDefault();
+                    if (".!?".Contains(lastChar))
+                    {
+                        sentence += lastChar;
+                    }
+                    
+                    formattedText.AppendLine(sentence);
+                    
+                    // Add extra line after every 2-3 sentences for readability
+                    if ((i + 1) % 3 == 0 && i < sentences.Length - 1)
+                    {
+                        formattedText.AppendLine();
+                    }
+                }
+            }
+
+            return formattedText.ToString().Trim();
         }
 
         private void DisplayError(string message)

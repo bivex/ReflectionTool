@@ -192,8 +192,9 @@
         <Setter Property="Foreground" Value="#e8e6e3"/>
         <Setter Property="BorderBrush" Value="#374151"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="12"/>
+        <Setter Property="Padding" Value="15"/>
         <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="Segoe UI, Calibri, Arial"/>
         <Setter Property="AcceptsReturn" Value="True"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
