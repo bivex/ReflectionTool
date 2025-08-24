@@ -6,47 +6,125 @@
         xmlns:local="clr-namespace:WikiReflectionTool"
         mc:Ignorable="d"
         Title="Wikipedia Reflection Tool" Height="800" Width="1000"
+        MinHeight="600" MinWidth="800"
         Style="{DynamicResource WindowStyle}"
+        WindowState="Maximized"
         Loaded="MainWindow_Loaded">
-    <Grid Margin="20">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Top Controls -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-            <Label x:Name="GuiLanguageLabel" Content="Interface Language:" VerticalAlignment="Center" FontWeight="Bold" Style="{DynamicResource LabelStyle}"/>
-            <ComboBox x:Name="GuiLanguageComboBox" Width="150" Margin="5,0,15,0" Style="{DynamicResource ComboBoxStyle}"/>
-            <Label x:Name="WikiLanguageLabel" Content="Wikipedia Language:" VerticalAlignment="Center" FontWeight="Bold" Style="{DynamicResource LabelStyle}"/>
-            <ComboBox x:Name="WikiLanguageComboBox" Width="150" Margin="5,0,15,0" Style="{DynamicResource ComboBoxStyle}"/>
-            <Button x:Name="FetchButton" Content="🔄 New Random Article" Width="200" Margin="15,0,0,0" Style="{DynamicResource ButtonStyle}"/>
-            <StackPanel Width="20"/> <!-- Spacer -->
-            <Button x:Name="ThemeButton" Content="🌙 Dark Theme" Width="120" Margin="0,0,0,0" Style="{DynamicResource ButtonStyle}"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <WrapPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                    <Label x:Name="GuiLanguageLabel" Content="Interface Language:" VerticalAlignment="Center" FontWeight="Bold" Style="{DynamicResource LabelStyle}"/>
+                    <ComboBox x:Name="GuiLanguageComboBox" MinWidth="120" Margin="5,0" Style="{DynamicResource ComboBoxStyle}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                    <Label x:Name="WikiLanguageLabel" Content="Wikipedia Language:" VerticalAlignment="Center" FontWeight="Bold" Style="{DynamicResource LabelStyle}"/>
+                    <ComboBox x:Name="WikiLanguageComboBox" MinWidth="120" Margin="5,0" Style="{DynamicResource ComboBoxStyle}"/>
+                </StackPanel>
+                
+                <Button x:Name="FetchButton" Content="🔄 New Random Article" MinWidth="180" Margin="5,0" Style="{DynamicResource ButtonStyle}"/>
+            </WrapPanel>
+            
+            <Button Grid.Column="1" x:Name="ThemeButton" Content="🌙 Dark Theme" MinWidth="120" Style="{DynamicResource ButtonStyle}"/>
+        </Grid>
 
         <!-- Article Content -->
         <Border Grid.Row="1" Style="{DynamicResource ArticleBorderStyle}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <StackPanel Margin="15">
-                    <TextBlock x:Name="TitleTextBlock" Text="Fetching article..." FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" Style="{DynamicResource TitleTextBlockStyle}" MouseDown="TitleTextBlock_MouseDown">
-                         <TextBlock.ToolTip>
-                            <ToolTip Content="Click to open in browser"/>
-                        </TextBlock.ToolTip>
-                    </TextBlock>
-
-                    <Label x:Name="SummaryLabel" Content="Summary" FontSize="16" FontWeight="Bold" Margin="0,10,0,5" Style="{DynamicResource HeadingLabelStyle}"/>
-                    <TextBox x:Name="SummaryTextBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" Style="{DynamicResource TextBoxStyle}"/>
-
-                    <Label x:Name="SectionsLabel" Content="Sections" FontSize="16" FontWeight="Bold" Margin="0,15,0,5" Visibility="Collapsed" Style="{DynamicResource HeadingLabelStyle}"/>
-                    <!-- For sections, a FlowDocumentScrollViewer might be better for rich text, but TextBox is simpler for now -->
-                    <TextBox x:Name="SectionsTextBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="100" Visibility="Collapsed" Style="{DynamicResource TextBoxStyle}" AcceptsReturn="True"/>
-
-
-                    <Label x:Name="CategoriesLabel" Content="Categories" FontSize="16" FontWeight="Bold" Margin="0,15,0,5" Visibility="Collapsed" Style="{DynamicResource HeadingLabelStyle}"/>
-                    <TextBox x:Name="CategoriesTextBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="50" Visibility="Collapsed" Style="{DynamicResource TextBoxStyle}"/>
-                </StackPanel>
-            </ScrollViewer>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Title Section -->
+                <TextBlock Grid.Row="0" x:Name="TitleTextBlock" Text="Fetching article..." 
+                          FontSize="20" FontWeight="Bold" 
+                          HorizontalAlignment="Center" 
+                          Margin="15,15,15,10" 
+                          TextWrapping="Wrap"
+                          TextAlignment="Center"
+                          Style="{DynamicResource TitleTextBlockStyle}" 
+                          MouseDown="TitleTextBlock_MouseDown">
+                    <TextBlock.ToolTip>
+                        <ToolTip Content="Click to open in browser"/>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+                
+                <!-- Content ScrollViewer -->
+                <ScrollViewer Grid.Row="1" 
+                             VerticalScrollBarVisibility="Auto" 
+                             HorizontalScrollBarVisibility="Disabled"
+                             Padding="0,0,3,0">
+                    <Grid Margin="15,0,15,15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Summary Section -->
+                        <Label Grid.Row="0" x:Name="SummaryLabel" Content="Summary" 
+                               FontSize="16" FontWeight="Bold" 
+                               Margin="0,0,0,5" 
+                               Style="{DynamicResource HeadingLabelStyle}"/>
+                        <TextBox Grid.Row="1" x:Name="SummaryTextBox" 
+                                IsReadOnly="True" 
+                                TextWrapping="Wrap" 
+                                VerticalScrollBarVisibility="Auto"
+                                HorizontalScrollBarVisibility="Disabled"
+                                MinHeight="120" MaxHeight="300"
+                                Margin="0,0,0,15"
+                                Style="{DynamicResource TextBoxStyle}"/>
+                        
+                        <!-- Sections Section -->
+                        <Label Grid.Row="2" x:Name="SectionsLabel" Content="Sections" 
+                               FontSize="16" FontWeight="Bold" 
+                               Margin="0,0,0,5" 
+                               Visibility="Collapsed" 
+                               Style="{DynamicResource HeadingLabelStyle}"/>
+                        <TextBox Grid.Row="3" x:Name="SectionsTextBox" 
+                                IsReadOnly="True" 
+                                TextWrapping="Wrap" 
+                                VerticalScrollBarVisibility="Auto"
+                                HorizontalScrollBarVisibility="Disabled"
+                                MinHeight="100" MaxHeight="250"
+                                Margin="0,0,0,15"
+                                Visibility="Collapsed" 
+                                Style="{DynamicResource TextBoxStyle}" 
+                                AcceptsReturn="True"/>
+                        
+                        <!-- Categories Section -->
+                        <Label Grid.Row="4" x:Name="CategoriesLabel" Content="Categories" 
+                               FontSize="16" FontWeight="Bold" 
+                               Margin="0,0,0,5" 
+                               Visibility="Collapsed" 
+                               Style="{DynamicResource HeadingLabelStyle}"/>
+                        <TextBox Grid.Row="5" x:Name="CategoriesTextBox" 
+                                IsReadOnly="True" 
+                                TextWrapping="Wrap" 
+                                VerticalScrollBarVisibility="Auto"
+                                HorizontalScrollBarVisibility="Disabled"
+                                MinHeight="60" MaxHeight="150"
+                                Visibility="Collapsed" 
+                                Style="{DynamicResource TextBoxStyle}"/>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
         </Border>
     </Grid>
 </Window> 
